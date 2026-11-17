@@ -2,14 +2,14 @@
 """把订阅里的 proxies / proxy-groups 块套进 OpenClash 运行态配置（热加载用，2026-10-13 起）。
 
 背景：软路由有两份文件——
-  /etc/openclash/config/zijian.yaml  订阅原件（OpenClash 下次重启会用它重新生成运行态）
-  /etc/openclash/zijian.yaml         运行态（OpenClash 重新序列化过：缩进/引号/sniffer/DNS 端口都不同）
+  /etc/openclash/config/<sub>.yaml  订阅原件（OpenClash 下次重启会用它重新生成运行态）
+  /etc/openclash/<sub>.yaml         运行态（OpenClash 重新序列化过：缩进/引号/sniffer/DNS 端口都不同）
 改组（而不只是改规则行）时不能只改一份，否则重启后运行态会把旧组带回来。
 
 用法（在软路由上跑）：
   scp skills/subscription-ops/scripts/splice-runtime-groups.py <router>:/tmp/
-  ssh <router> 'python3 /tmp/splice-runtime-groups.py /tmp/zijian-new.yaml /etc/openclash/zijian.yaml'
-  成功会生成 zijian.yaml.new：先 clash_meta -t 校验，再 mv 覆盖并 API 热加载。
+  ssh <router> 'python3 /tmp/splice-runtime-groups.py /tmp/<sub>-new.yaml /etc/openclash/<sub>.yaml'
+  成功会生成 <sub>.yaml.new：先 clash_meta -t 校验，再 mv 覆盖并 API 热加载。
 
 注意：运行态里列表项是顶格的（- name: X），所以「下一个顶层键」判定必须排除 `- ` 开头的行，
 否则块尾会判错、新旧组并存（2026-10-13 踩过：mihomo 报 duplicate group name）。

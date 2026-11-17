@@ -150,9 +150,9 @@ done
 cat <<'NEXT'
 
 == 下一步（路由器侧，手工执行）==
-  1) 重下订阅 → python3 splice-runtime-groups.py <新订阅> /etc/openclash/zijian.yaml
+  1) 重下订阅 → python3 splice-runtime-groups.py <新订阅> /etc/openclash/<sub>.yaml
   2) 独立目录 clash_meta -t 校验（去掉 external-ui 行）
   3) PUT /configs?force=true，判据：返回 204 且 pidof clash 不变
-  4) **刷新 /etc/openclash/custom/zijian-failover-good.yaml**（否则 failover 回滚会把旧节点带回来）
+  4) **刷新 /etc/openclash/custom/<sub>-failover-good.yaml**（否则 failover 回滚会把旧节点带回来）
   5) 客户端重拉订阅；台账 / README / 变更记录 三条增量更新
 NEXT

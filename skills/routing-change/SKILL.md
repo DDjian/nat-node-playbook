@@ -10,7 +10,7 @@ description: 改代理分流规则或切换生产出口（软路由 OpenClash / 
 
 ## 固定动作（五步）
 
-1. **备份**：`<router>:/mnt/sda4/backup/<用途>-<时间戳>/` 下存 uci 配置、运行配置、被改脚本、crontab，并写 `README-rollback.txt`。
+1. **备份**：`<router>:<备份路径>/<用途>-<时间戳>/` 下存 uci 配置、运行配置、被改脚本、crontab，并写 `README-rollback.txt`。
 2. **说清语义**：这次改什么、什么流量受影响、预期出口是谁（一句话）。
 3. **改**：规则只改云上模板（`subscription-ops`）；组选择用 API PUT；路由器订阅文件改动**落盘 + API 热加载**（`PUT /configs?force=true`，见 `subscription-ops`）——**只有端口/DNS/防火墙/TUN 类改动才 `restart`**。
 4. **真实验证**：
