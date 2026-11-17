@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# 提交前只扫暂存内容——比扫全树更准，也更快。
+set -euo pipefail
+ROOT="$(git rev-parse --show-toplevel)"
+exec "$ROOT/scripts/redact-scan.sh" --staged

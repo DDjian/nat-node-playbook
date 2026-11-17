@@ -1,0 +1,20 @@
+# 真实资产整块不上传：节点凭据、台账、订阅、巡检数据都在里面。
+# 这一行是 index 层硬拦截 —— git 不会递归进去，也不会生成 gitlink。
+/private/
+
+# 二进制缓存（sing-box 等下载物，可重现）
+/.cache/
+
+# 旧备份与临时物
+*.bak-*
+*.tar.gz
+/stage/
+/out/
+*.log
+
+# 编辑器 / 系统
+.DS_Store
+.vscode/
+.idea/
+__pycache__/
+*.pyc

@@ -1,0 +1,55 @@
+{
+  "_README": "sing-box 服务端模板（2026-10-12 起默认路线）。替换 <UUID>/<PRIVATE_KEY>/<SID>/<TCP_PORT>/<UDP_PORT>/<WS_PATH>/<CERTS_DIR> 后写入服务器 /etc/sing-box/config.json（chmod 600）。不放 UDP 时删掉 hysteria2 入站；不需要 CF 隧道时删掉 vless-ws 入站。Alpine 必须用官方 -musl 二进制。hy2 的 ignore_client_bandwidth + obfs 是共享母鸡硬性要求。",
+  "log": { "level": "warn", "output": "/var/log/sing-box/box.log", "timestamp": true },
+  "inbounds": [
+    {
+      "type": "vless",
+      "tag": "vless-reality",
+      "listen": "0.0.0.0",
+      "listen_port": "<TCP_PORT>",
+      "users": [ { "uuid": "<UUID>", "flow": "xtls-rprx-vision" } ],
+      "tls": {
+        "enabled": true,
+        "server_name": "www.apple.com",
+        "reality": {
+          "enabled": true,
+          "handshake": { "server": "www.apple.com", "server_port": 443 },
+          "private_key": "<PRIVATE_KEY>",
+          "short_id": [ "<SID>" ]
+        }
+      }
+    },
+    {
+      "type": "hysteria2",
+      "tag": "hysteria2",
+      "listen": "0.0.0.0",
+      "listen_port": "<UDP_PORT>",
+      "users": [ { "password": "<HY2_PASSWORD>" } ],
+      "ignore_client_bandwidth": true,
+      "obfs": { "type": "salamander", "password": "<HY2_OBFS_PASSWORD>" },
+      "masquerade": { "type": "string", "content": "ok" },
+      "tls": {
+        "enabled": true,
+        "alpn": [ "h3" ],
+        "certificate_path": "<CERTS_DIR>/<name>.crt",
+        "key_path": "<CERTS_DIR>/<name>.key"
+      }
+    },
+    {
+      "type": "vless",
+      "tag": "vless-ws",
+      "listen": "127.0.0.1",
+      "listen_port": 18080,
+      "users": [ { "uuid": "<UUID>" } ],
+      "transport": { "type": "ws", "path": "<WS_PATH>" }
+    }
+  ],
+  "outbounds": [ { "type": "direct", "tag": "direct" } ],
+  "route": {
+    "rules": [
+      { "protocol": "bittorrent", "action": "reject" },
+      { "port": 25, "action": "reject" },
+      { "ip_is_private": true, "action": "reject" }
+    ]
+  }
+}

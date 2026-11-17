@@ -1,0 +1,14 @@
+#!/sbin/openrc-run
+name="mem-reclaim"
+description="periodic page-cache reclaim for small containers (mem-reclaim.sh)"
+command="/usr/local/bin/mem-reclaim.sh"
+supervisor="supervise-daemon"
+pidfile="/run/mem-reclaim.pid"
+respawn_delay=5
+respawn_max=0
+output_log="/var/log/mem-reclaim.out"
+error_log="/var/log/mem-reclaim.err"
+
+depend() {
+    need localmount
+}
