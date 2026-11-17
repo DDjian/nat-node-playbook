@@ -52,6 +52,8 @@
 git config core.hooksPath .githooks   # 一次性：让 pre-commit 自动扫暂存区
 ```
 
+想让远端也兜一层：加 `.github/workflows/redact.yml`，`on: [push, pull_request]`，一步 `run: python3 scripts/redact-scan.py`（需仓库 Actions 可用）。
+
 扫描命中时**逐条确认**：占位符、RFC 5737 示例段（192.0.2.0/24、198.51.100.0/24、203.0.113.0/24）、文档里的回环地址属于正常；真实地址一律换占位符，别加进白名单了事。
 
 ## 目录
